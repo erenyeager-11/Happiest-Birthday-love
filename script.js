@@ -1,12 +1,7 @@
 /* ====== EDIT ME ====== */
 const NAME='Tanishka';               // her name
-const INTRO='intro.mp3';// song that plays when she taps Yes/No
-const SONGS=[ // title, artist, file in the same folder
- ['Song 1','Artist','song01.mp3'],['Song 2','Artist','song02.mp3'],['Song 3','Artist','song03.mp3'],
- ['Song 4','Artist','song04.mp3'],['Song 5','Artist','song05.mp3'],['Song 6','Artist','song06.mp3'],
- ['Song 7','Artist','song07.mp3'],['Song 8','Artist','song08.mp3'],['Song 9','Artist','song09.mp3'],
- ['Song 10','Artist','song10.mp3'],['Song 11','Artist','song11.mp3'],['Song 12','Artist','song12.mp3'],
- ['Song 13','Artist','song13.mp3'],['Song 14','Artist','song14.mp3'],['Song 15','Artist','song15.mp3']];
+const INTRO='song.mp3'; // the ONE song for the whole site
+
 /* ===================== */
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 $$('.n').forEach(e=>e.textContent=NAME);
@@ -21,8 +16,8 @@ function startGarden(){$('#garden').classList.add('on');const f=$$('.flower-cont
 $('#seal').onclick=()=>{$('#env').classList.add('open');$('#cover').classList.add('opening');
  setTimeout(()=>{$('#cover').classList.add('gone');document.body.classList.remove('lock');startGarden()},2400)};
 /* intro song: Yes plays it; "No" plays it the moment it is touched, then vanishes */
-const intro=new Audio(INTRO);intro.loop=true;const pl=new Audio();
-const go=()=>{pl.pause();intro.play().catch(()=>{});burst(10);setTimeout(()=>$('main').scrollBy({left:innerWidth,behavior:'smooth'}),1600)};
+const intro=new Audio(INTRO);intro.loop=true;const mu=$('#mute');intro.onplay=()=>mu.textContent='🔊';intro.onpause=()=>mu.textContent='🔇';mu.onclick=()=>intro.paused?intro.play().catch(()=>{}):intro.pause();
+const go=()=>{intro.play().catch(()=>{});burst(10);setTimeout(()=>$('main').scrollBy({left:innerWidth,behavior:'smooth'}),1600)};
 $('#yes').onclick=go;
 const no=$('#no');let done=0;
 ['pointerenter','pointerdown','touchstart'].forEach(ev=>no.addEventListener(ev,()=>{if(done)return;done=1;no.classList.add('vanish');$('#toast').textContent='Nice try 😌 playing it anyway…';go()},{passive:true}));
@@ -34,16 +29,6 @@ $('#start').onclick=e=>{e.target.remove();sc=0;$('#score').textContent=0;$('#win
   b.onclick=()=>{b.onclick=null;b.classList.add('pop');$('#score').textContent=++sc;
    if(sc>=10){clearInterval(tm);$('#win').hidden=false;burst(30);$$('.toy').forEach(t=>t.remove())}};
   $('#arena').appendChild(b);setTimeout(()=>b.remove(),5200)},650)};
-/* music player */
-let cur=-1;const L=$('#list'),P=$('#play');
-SONGS.forEach((s,i)=>{const li=document.createElement('li');li.textContent=`${s[0]} · ${s[1]}`;li.onclick=()=>load(i);L.appendChild(li)});
-function load(i){cur=(i+SONGS.length)%SONGS.length;intro.pause();pl.src=''+SONGS[cur][2];pl.play().catch(()=>{});
- $('#ttl').textContent=SONGS[cur][0]+' · '+SONGS[cur][1];$$('#list li').forEach((l,k)=>l.classList.toggle('on',k==cur))}
-P.onclick=()=>{if(cur<0)return load(0);pl.paused?(intro.pause(),pl.play()):pl.pause()};
-$('#next').onclick=()=>load(cur+1);$('#prev').onclick=()=>load(cur<0?0:cur-1);
-pl.onplay=()=>P.textContent='⏸';pl.onpause=()=>P.textContent='▶';pl.onended=()=>load(cur+1);
-pl.ontimeupdate=()=>{if(pl.duration)$('#bar').value=pl.currentTime/pl.duration*100};
-$('#bar').oninput=e=>{if(pl.duration)pl.currentTime=e.target.value/100*pl.duration};
 /* confetti on last slide */
 new IntersectionObserver(e=>{if(e[0].isIntersecting)burst(30)},{threshold:.6}).observe($('#s-end'));
 
@@ -96,3 +81,18 @@ const KT=['Caught it 😌 it\'s mine now','Another one? Greedy 😏','I felt tha
 $('#kiss').onclick=e=>{const r=e.target.getBoundingClientRect(),k=document.createElement('i');k.className='kiss';k.textContent='😘';
  k.style.left=r.left+r.width/2-28+'px';k.style.top=r.top+'px';document.body.appendChild(k);setTimeout(()=>k.remove(),1700);
  $('#kt').textContent=KT[kn++%KT.length]};
+
+/* memory match */
+const E=['💋','🤗','🫶','😘','🌹','💑'];let first=null,lock=0,mvs=0,pairs=0;
+[...E,...E].sort(()=>Math.random()-.5).forEach(e=>{const b=document.createElement('button');b.textContent='💗';b.onclick=()=>{
+ if(lock||b.classList.contains('up')||b.classList.contains('ok'))return;b.textContent=e;b.classList.add('up');
+ if(!first){first=b;return}$('#mv').textContent=++mvs;
+ if(first.textContent==e){first.className=b.className='ok';first=null;if(++pairs==6){$('#mw').hidden=false;burst(26)}}
+ else{lock=1;const f=first;first=null;setTimeout(()=>{[f,b].forEach(x=>{x.className='';x.textContent='💗'});lock=0},800)}};
+ $('#mem').appendChild(b)});
+/* land the kiss */
+let hit=0,pos=50,spd=1.6;const tk=$('#tk');
+(function an(t){pos=50+46*Math.sin(t/1000*spd);tk.style.left=pos+'%';requestAnimationFrame(an)})(0);
+$('#tap').onclick=()=>{if(hit>=3)return;if(Math.abs(pos-50)<8){$('#ph').textContent=++hit;spd+=.7;
+ $('#tm').textContent=hit==3?'Three perfect kisses 😘 I\'m collecting every one in person':['Perfect 😘','Mmm 💋 again, faster…'][hit-1];if(hit==3)burst(28)}
+ else $('#tm').textContent='Missed 😏 you\'re shy, try again'};

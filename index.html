@@ -14,17 +14,17 @@
 
 <div id="garden"><div class="ground"><div class="flower-container"></div><div class="flower-container"></div><div class="flower-container"></div><div class="flower-container"></div><div class="flower-container"></div><div class="flower-container"></div><div class="flower-container"></div><div class="flower-container"></div><div class="flower-container"></div><div class="flower-container"></div><div class="flower-container"></div><div class="flower-container"></div></div></div>
 
-<button class="nav" id="L" aria-label="Previous">‹</button><button class="nav" id="R" aria-label="Next">›</button><div id="dots"></div>
+<button class="nav" id="L" aria-label="Previous">‹</button><button class="nav" id="R" aria-label="Next">›</button><div id="dots"></div><button id="mute" aria-label="Music on/off">🔇</button>
 <main>
 <section id="s-song"><div class="card">
-  <img class="gif" src="song.gif" alt="song.gif">
+  <video class="gif" src="song_gif.mp4" autoplay loop muted playsinline></video>
   <h2 class="hand">Shall I play a song for you?</h2>
   <div class="row"><button class="btn" id="yes">Yes 💗</button><button class="btn ghost" id="no">No</button></div>
   <p class="small" id="toast"></p>
 </div></section>
 
 <section><div class="card">
-  <img class="gif" src="birthday.gif" alt="birthday.gif">
+  <video class="gif" src="birthday_gif.mp4" autoplay loop muted playsinline></video>
   <h1 class="hand">Happy Birthday, <b class="n"></b> 🎂</h1>
   <p class="letter">Today the world got its softest, brightest, most beautiful soul, and I got the luckiest seat beside it.<br><br>
   I wish you a year full of laughter that hurts your cheeks, dreams that finally say yes, and days as gentle as you are. Whatever you chase next, I'll be cheering the loudest.<br><br>
@@ -55,10 +55,10 @@
 
 <section><div class="wide"><h2 class="hand">This is how I miss you</h2>
   <div class="grid">
-    <figure><img src="miss1.gif" alt="miss1.gif"><figcaption>when I wake up</figcaption></figure>
-    <figure><img src="miss2.gif" alt="miss2.gif"><figcaption>when I'm eating</figcaption></figure>
-    <figure><img src="miss3.gif" alt="miss3.gif"><figcaption>when I'm alone</figcaption></figure>
-    <figure><img src="miss4.gif" alt="miss4.gif"><figcaption>all the time</figcaption></figure>
+    <figure><video src="miss1_gif.mp4" autoplay loop muted playsinline></video><figcaption>when I wake up</figcaption></figure>
+    <figure><video src="miss2_gif.mp4" autoplay loop muted playsinline></video><figcaption>when I'm eating</figcaption></figure>
+    <figure><video src="miss3_gif.mp4" autoplay loop muted playsinline></video><figcaption>when I'm alone</figcaption></figure>
+    <figure><video src="miss4_gif.mp4" autoplay loop muted playsinline></video><figcaption>all the time</figcaption></figure>
   </div></div></section>
 
 <section><div class="wide"><h2 class="hand">One more letter, just for you</h2><img class="paperimg" src="letter2.jpg" alt="letter2.jpg"></div></section>
@@ -106,12 +106,16 @@
   <p class="small" id="kt"></p>
 </div></section>
 
-<section><div class="card player">
-  <h2 class="hand">Songs that sound like you 🎧</h2>
-  <p class="title" id="ttl">Pick a song</p>
-  <input type="range" id="bar" value="0" max="100">
-  <div class="row"><button class="btn round" id="prev">⏮</button><button class="btn round lg" id="play">▶</button><button class="btn round" id="next">⏭</button></div>
-  <ol id="list"></ol>
+<section><div class="card">
+  <h2 class="hand">Match our moments 💑</h2><p class="small">find all the pairs · moves: <b id="mv">0</b></p>
+  <div id="mem"></div><p class="note" id="mw" hidden>Every kiss and hug matched 😘 the real ones are waiting for you 💗</p>
+</div></section>
+
+<section><div class="card">
+  <h2 class="hand">Land the kiss 💋</h2><p class="small">tap when 💋 is in the pink zone · perfect: <b id="ph">0</b>/3</p>
+  <div id="tbar"><span id="zone"></span><i id="tk">💋</i></div>
+  <button class="btn" id="tap">Kiss! 💋</button>
+  <p class="note" id="tm">3 perfect kisses to win 😏</p>
 </div></section>
 
 <section><div class="card">
